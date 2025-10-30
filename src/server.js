@@ -8,7 +8,9 @@ const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 app.use(express.json());
+
 app.use(cors());
+
 app.use(
   pino({
     level: 'info',
@@ -39,7 +41,7 @@ app.get('/notes/:noteId', (req, res) => {
   });
 });
 
-app.get('/test-error', () => {
+app.get('/test-error', (req, res) => {
   throw new Error('Simulated server error');
 });
 
@@ -48,10 +50,14 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
+  console.error(err);
+
+  const isProd = process.env.NODE_ENV === 'production';
+
   res.status(500).json({
-    message: 'Internal Server Error',
-    error: err.message,
+    message: isProd
+      ? 'Something went wrong. Please try again later.'
+      : err.message,
   });
 });
 

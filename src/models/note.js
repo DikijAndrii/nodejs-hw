@@ -35,5 +35,5 @@ const noteSchema = new Schema(
     versionKey: false, // прибирає __v
   },
 );
-
+noteSchema.index({ title: 'text', content: 'text' }); //Додаємо текстовий індекс до моделі
 export const Note = model('Note', noteSchema);

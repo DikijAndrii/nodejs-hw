@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEMail = async (options) => {
+export const sendEmail = async (options) => {
   // створює з'єднання зі SMTP-сервером.
 
   return await transporter.sendMail(options);

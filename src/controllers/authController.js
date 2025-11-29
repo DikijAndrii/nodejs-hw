@@ -4,7 +4,7 @@ import User from '../models/user.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
 import Session from '../models/session.js';
 import jwt from 'jsonwebtoken';
-import { sendEMail } from '../utils/sendMail.js';
+import { sendEmail } from '../utils/sendMail.js';
 import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
@@ -115,7 +115,7 @@ export const requestResetEmail = async (req, res, next) => {
   });
 
   try {
-    await sendEMail({
+    await sendEmail({
       from: process.env.SMTP_FROM,
       to: email,
       subject: 'Reset your password',
@@ -151,7 +151,7 @@ export const resetPassword = async (req, res, next) => {
   }
   //Якщо користувач існує створюємо новий пароль і оновлюємо користувача
   const hashedPassword = await bcrypt.hash(password, 10);
-  await User.updateOne({ _id: user.id }, { password: hashedPassword });
+  await User.updateOne({ _id: user._id }, { password: hashedPassword });
   //Чистимо старі сесії
   await Session.deleteMany({ userId: user._id });
   res
